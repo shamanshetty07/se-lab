@@ -1,0 +1,44 @@
+@startuml
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam defaultFontName "Arial"
+skinparam defaultFontSize 12
+skinparam monochrome false
+hide empty members
+left to right direction
+
+package "Presentation Layer" #DDEBF7 {
+  component "User Interface" as UI <<component>>
+
+  component "Receipt Printer" as RP <<component>>
+}
+
+package "Business Layer" #D5E8D4 {
+  component "Order Manager" as OM <<component>>
+
+  component "Payment Service" as PS <<component>>
+}
+
+package "Data Layer" #FFF2CC {
+  component "Database" as DB <<component>>
+}
+
+' ---- Provided interfaces (lollipop) ----
+interface "OrderInterface" as OrderIntf
+interface "PaymentInterface" as PaymentIntf
+interface "DatabaseInterface" as DatabaseIntf
+interface "ReceiptInterface" as ReceiptIntf
+
+' ---- Providers (solid line: component provides/realizes interface) ----
+OrderIntf <- OM : provided
+PaymentIntf <- PS : provided
+DatabaseIntf <- DB : provided
+ReceiptIntf <- RP : provided
+
+' ---- Consumers (dashed <<use>> usage dependency: component requires interface) ----
+OrderIntf <- UI : <<use>> Order submission / Coffee & size selection
+PaymentIntf <- OM : <<use>> Payment processing / Credit card payment
+DatabaseIntf <- OM : <<use>> Menu & pricing / Store order details
+ReceiptIntf <- OM : <<use>> Send receipt data / Print receipt
+
+@enduml
